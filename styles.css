@@ -80,18 +80,24 @@ h1 {
 }
 
 .btn-gradient {
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    background-size: 200% auto;
+    background-image: linear-gradient(45deg, 
+        var(--primary-color) 0%, 
+        var(--primary-light) 51%, 
+        var(--primary-color) 100%
+    );
     border: none;
     color: var(--dark-blue);
     font-weight: 600;
     padding: 1rem 2.5rem;
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
-    transition: all 0.3s ease;
+    transition: 0.5s;
     animation: fadeIn 1s ease-out 1s both;
 }
 
 .btn-gradient:hover {
+    background-position: right center;
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4);
     background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
@@ -99,6 +105,11 @@ h1 {
 }
 
 .calculator-card {
+    height: 100%;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
     border-radius: 24px;
@@ -119,10 +130,8 @@ h1 {
 }
 
 .form-control:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1);
-    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
 }
 
 .form-control::placeholder {
@@ -189,4 +198,740 @@ h1 {
         width: 100%;
         margin-top: 2rem;
     }
+}
+
+#calculadora {
+    min-height: 100vh;
+    padding: 4rem 0;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#calculadora.visible {
+    opacity: 1;
+}
+
+.calculators-container {
+    width: 100%;
+}
+
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Ajuste os containers para ficarem acima das partículas */
+.hero, #calculadora {
+    position: relative;
+    z-index: 2;
+}
+
+.typing-effect {
+    border-right: 3px solid var(--primary-color);
+    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--primary-color) }
+}
+
+.loading-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-effect::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 229, 255, 0.2),
+        transparent
+    );
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    from { left: -100% }
+    to { left: 100% }
+}
+
+.blur-effect {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+
+.wave-effect {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url('wave.svg');
+    animation: wave 10s linear infinite;
+}
+
+@keyframes wave {
+    0% { background-position-x: 0; }
+    100% { background-position-x: 1000px; }
+}
+
+.notification {
+    animation: notification 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes notification {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Ajuste da cor do texto explicativo */
+.calculator-card p {
+    color: rgba(255, 255, 255, 0.8) !important; /* Mais claro e legível */
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Estilo do Modal */
+.modal-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 20, 55, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-custom.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content-custom {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid rgba(0, 229, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 229, 255, 0.1);
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.modal-custom.active .modal-content-custom {
+    transform: translateY(0);
+}
+
+.modal-header-custom {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-close-modal {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-close-modal:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.btn-close-modal i {
+    font-size: 1.2rem;
+}
+
+.modal-result {
+    color: white;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-back:hover {
+    background: rgba(0, 229, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Estilo para os resultados */
+.result-details {
+    color: #fff;
+}
+
+.result-value {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Animação de digitação */
+.typing {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end);
+    margin: 0;
+}
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+/* Loading animation */
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(0, 229, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg) }
+}
+
+/* Ícones com glow */
+.result-icon {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-right: 10px;
+    filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5));
+}
+
+/* Estilo para o container dos botões */
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-back, .btn-close {
+    flex: 1;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-back {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.btn-close {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-back:hover, .btn-close:hover {
+    transform: translateY(-2px);
+}
+
+.btn-back:hover {
+    background: rgba(0, 229, 255, 0.2);
+    color: var(--primary-color);
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Footer Styles */
+.footer {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.social-link:hover {
+    background: var(--primary-color);
+    color: var(--dark-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 229, 255, 0.2);
+}
+
+.text-cyan {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.text-cyan:hover {
+    color: var(--primary-light);
+}
+
+/* Adicione também um botão de voltar ao topo */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-blue);
+    text-decoration: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    background: var(--primary-light);
+}
+
+.bg-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+.text-white-80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+section h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.privacy-content ul,
+.terms-content ul {
+    list-style-type: none;
+    padding-left: 1.5rem;
+}
+
+.privacy-content ul li,
+.terms-content ul li {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.privacy-content ul li:before,
+.terms-content ul li:before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: -1.5rem;
+}
+
+.btn-back-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background: rgba(0, 229, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-back-nav:hover {
+    background: rgba(0, 229, 255, 0.2);
+    transform: translateX(-5px);
+    color: var(--primary-color);
+}
+
+.btn-back-nav i {
+    font-size: 0.9rem;
+}
+
+.modal-lg {
+    max-width: 800px !important;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-body-custom {
+    padding: 0 1.5rem;
+}
+
+.modal-body-custom h4 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.modal-body-custom ul {
+    list-style: none;
+    padding-left: 1.2rem;
+}
+
+.modal-body-custom ul li {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.modal-body-custom ul li:before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: -1.2rem;
+}
+
+.text-white-80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Estilização da scrollbar para o modal */
+.modal-content-custom::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content-custom::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-content-custom::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* Ajustes Mobile */
+@media (max-width: 768px) {
+    /* Hero Section */
+    .hero {
+        padding: 2rem 0;
+        min-height: auto;
+    }
+
+    h1 {
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .hero p {
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    /* Calculadoras */
+    .calculator-card {
+        border-radius: 0;
+        margin: 0 -12px; /* Remove margens laterais */
+        padding: 1.5rem;
+    }
+
+    .calculator-card h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Modal */
+    .modal-content-custom {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 1rem;
+        max-height: 85vh;
+    }
+
+    .modal-header-custom h3 {
+        font-size: 1.3rem;
+    }
+
+    .btn-close-modal {
+        padding: 8px;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 2rem 0;
+    }
+
+    .footer .row > div {
+        text-align: center !important;
+        margin-bottom: 1rem;
+    }
+
+    .social-links {
+        justify-content: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer a {
+        display: block;
+        margin: 0.5rem 0;
+    }
+
+    /* Inputs e Botões */
+    .form-control {
+        font-size: 16px; /* Evita zoom automático no iOS */
+        padding: 0.8rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+    }
+
+    /* Ajuste das margens do container para alinhar */
+    #calculadora .container {
+        padding: 0;
+    }
+
+    /* Ajuste do espaçamento entre os cards */
+    .row.g-4 {
+        --bs-gutter-y: 0;
+    }
+
+    /* Garantir que o botão CTA mantenha as bordas arredondadas */
+    .btn-gradient {
+        border-radius: 50px !important;
+        padding: 1rem 2.5rem;
+    }
+
+    /* Ajuste para inputs lado a lado em telas pequenas */
+    .calculator-card .row .col-6 {
+        padding: 0 8px; /* Reduz um pouco o padding lateral */
+    }
+
+    .calculator-card .form-control {
+        padding: 0.5rem; /* Input um pouco menor em telas pequenas */
+    }
+
+    /* Ajuste no label para não quebrar linha */
+    .calculator-card label {
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 360px) {
+    .calculator-card {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Ajustes para orientação landscape */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+
+    .modal-content-custom {
+        max-height: 80vh;
+    }
+}
+
+/* Melhorias de usabilidade */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+input, button {
+    touch-action: manipulation;
+}
+
+/* Ajuste geral dos containers */
+@media (max-width: 768px) {
+    .calculator-card {
+        border-radius: 0;
+        margin: 0 -12px; /* Remove margens laterais */
+        padding: 1.5rem;
+    }
+
+    .modal-content-custom {
+        border-radius: 0;
+        width: 100%;
+        margin: 0;
+        height: 100vh;
+        max-height: 100vh;
+    }
+
+    /* Remove arredondamento dos inputs e botões */
+    .form-control,
+    .btn,
+    .btn-gradient,
+    .alert {
+        border-radius: 0;
+    }
+
+    /* Ajuste do modal para ocupar tela inteira */
+    .modal-custom {
+        padding: 0;
+    }
+
+    /* Ajuste do header do modal */
+    .modal-header-custom {
+        border-radius: 0;
+        padding: 1rem;
+    }
+
+    /* Ajuste do footer */
+    .footer {
+        border-radius: 0;
+        margin: 0 -12px;
+    }
+
+    /* Ajuste dos alertas de resultado */
+    .alert {
+        border-radius: 0;
+        margin: 1rem -1.5rem;
+    }
+
+    /* Ajuste dos botões sociais */
+    .social-link {
+        border-radius: 0;
+    }
+}
+
+/* Mantém os arredondamentos em desktop */
+@media (min-width: 769px) {
+    .calculator-card {
+        border-radius: 24px;
+    }
+
+    .modal-content-custom {
+        border-radius: 24px;
+    }
+
+    .btn,
+    .btn-gradient,
+    .form-control,
+    .alert {
+        border-radius: 50px;
+    }
+
+    .social-link {
+        border-radius: 50%;
+    }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 768px) {
+    #calculadora {
+        display: block !important;
+        min-height: auto !important;
+        padding: 2rem 0;
+    }
+
+    .calculator-card {
+        margin-bottom: 1rem !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Ajuste nos inputs para mobile */
+    input[type="number"] {
+        -webkit-appearance: none;
+        margin: 0;
+        -moz-appearance: textfield;
+    }
+
+    .form-control {
+        font-size: 16px !important; /* Evita zoom no iOS */
+    }
+}
+
+/* Estilos gerais importantes */
+#calculadora {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.calculator-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Suporte para Safari */
+    border: 1px solid rgba(0, 229, 255, 0.1);
 }
