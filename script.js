@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const calculadoraSection = document.getElementById('calculadora');
             if (!calculadoraSection) return;
 
-
+            // Limpa o conteúdo anterior
             calculadoraSection.innerHTML = `
                 <div class="container">
                     <div class="row g-4">
@@ -94,6 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                                 <button onclick="calcularCombustivel()" class="btn btn-gradient w-100">
                                     Calcular
+                                </button>
+                                <button onclick="initMap()" class="btn btn-gradient w-100 mt-3">
+                                    <i class="fas fa-gas-pump me-2"></i>
+                                    Encontrar Postos Próximos
                                 </button>
                             </div>
                         </div>
@@ -135,21 +139,25 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <button onclick="calcularViagem()" class="btn btn-gradient w-100">
                                     Calcular
                                 </button>
+                                <button onclick="initMap()" class="btn btn-gradient w-100 mt-3">
+                                    <i class="fas fa-gas-pump me-2"></i>
+                                    Encontrar Postos Próximos
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
 
-          
+            // Scroll suave até a seção
             calculadoraSection.scrollIntoView({ behavior: 'smooth' });
         });
     }
 });
 
-
+// Função para mostrar o modal com o resultado
 function showResult(resultado) {
-
+    // Remove qualquer modal existente antes de criar um novo
     const existingModals = document.querySelectorAll('.modal-custom');
     existingModals.forEach(modal => modal.remove());
 
@@ -173,21 +181,22 @@ function showResult(resultado) {
     setTimeout(() => modal.classList.add('active'), 10);
 }
 
-
+// Função para fechar o modal
 function closeModal(button) {
-
+    // Encontra o modal mais próximo
     const modal = button.closest('.modal-custom');
     if (!modal) return;
 
-
+    // Remove a classe active para iniciar a animação de saída
     modal.classList.remove('active');
 
+    // Remove o modal após a animação terminar
     setTimeout(() => {
         modal.remove();
-        document.body.style.overflow = 'auto'; // 
+        document.body.style.overflow = 'auto'; // Restaura o scroll da página
     }, 300);
 
-
+    // Previne que outros modais sejam abertos
     if (document.querySelector('.modal-custom')) {
         document.querySelectorAll('.modal-custom').forEach(m => {
             if (m !== modal) m.remove();
@@ -195,7 +204,7 @@ function closeModal(button) {
     }
 }
 
-
+// Adicione no início do arquivo
 function showLoading() {
     showResult(`
         <div class="text-center">
@@ -205,7 +214,7 @@ function showLoading() {
     `);
 }
 
-
+// Atualizar a função calcularCombustivel
 function calcularCombustivel() {
     const gasolina = parseFloat(document.getElementById('gasolina').value);
     const alcool = parseFloat(document.getElementById('alcool').value);
@@ -219,10 +228,10 @@ function calcularCombustivel() {
         return;
     }
     
-
+    // Mostrar loading
     showLoading();
     
-
+    // Simular processamento
     setTimeout(() => {
         const relacao = alcool / gasolina;
         
@@ -255,10 +264,10 @@ function calcularCombustivel() {
         `;
         
         showResult(mensagem);
-    }, 1500); // 
+    }, 1500); // 1.5 segundos de loading
 }
 
-
+// Atualizar a função calcularViagem de forma similar
 function calcularViagem() {
     const distancia = parseFloat(document.getElementById('distancia').value);
     const consumo = parseFloat(document.getElementById('consumo').value);
@@ -318,7 +327,8 @@ function calcularViagem() {
     }, 1500);
 }
 
-
+// Adicione a biblioteca ScrollReveal no HTML
+// <script src="https://unpkg.com/scrollreveal"></script>
 
 ScrollReveal().reveal('.calculator-card', {
     delay: 200,
@@ -342,7 +352,7 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-
+// Adicione ao final do seu arquivo script.js
 window.addEventListener('scroll', function() {
     const backToTop = document.querySelector('.back-to-top');
     if (window.pageYOffset > 300) {
@@ -444,9 +454,9 @@ function showTermsModal() {
     setTimeout(() => modal.classList.add('active'), 10);
 }
 
-
+// Adicione estas funções para melhor experiência mobile
 document.addEventListener('DOMContentLoaded', function() {
-
+    // Previne zoom em inputs no iOS
     const metas = document.getElementsByTagName('meta');
     let metaViewport = [...metas].find(meta => meta.name === "viewport");
     if (!metaViewport) {
@@ -456,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     metaViewport.content = "width=device-width, initial-scale=1, maximum-scale=1";
 
-
+    // Ajusta altura do vh para mobile
     function setVH() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -464,3 +474,354 @@ document.addEventListener('DOMContentLoaded', function() {
     setVH();
     window.addEventListener('resize', setVH);
 });
+
+// Adicione esta nova função
+function buscarPostosProximos() {
+    // Primeiro, verifica se o navegador suporta geolocalização
+    if (!navigator.geolocation) {
+        showResult(`
+            <div class="alert alert-danger">
+                Seu navegador não suporta geolocalização.
+            </div>
+        `);
+        return;
+    }
+
+    showLoading();
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Criar uma requisição para o Google Places
+            const location = new google.maps.LatLng(latitude, longitude);
+            const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+            const request = {
+                location: location,
+                radius: '2000', // 2km de raio
+                type: ['gas_station']
+            };
+
+            service.nearbySearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    // Formata os resultados para exibição
+                    let postosHTML = `
+                        <div class="result-details">
+                            <h4 class="text-white mb-4">
+                                <i class="fas fa-gas-pump result-icon"></i>
+                                Postos próximos a você
+                            </h4>
+                            <div class="postos-list">
+                    `;
+
+                    results.slice(0, 5).forEach(posto => {
+                        const rating = posto.rating ? `${posto.rating}/5 ⭐` : 'Sem avaliações';
+                        const aberto = posto.opening_hours?.isOpen() ? 
+                            '<span class="text-success">Aberto</span>' : 
+                            '<span class="text-danger">Fechado</span>';
+                        
+                        postosHTML += `
+                            <div class="posto-item mb-4">
+                                <h5 class="text-white">${posto.name}</h5>
+                                <p class="text-white-80">
+                                    <i class="fas fa-map-marker-alt"></i> 
+                                    ${posto.vicinity}
+                                </p>
+                                <p class="text-white-80">
+                                    <i class="fas fa-star"></i> 
+                                    ${rating}
+                                </p>
+                                <p class="text-white-80">
+                                    <i class="fas fa-clock"></i> 
+                                    ${aberto}
+                                </p>
+                                <a href="https://www.google.com/maps/place/?q=place_id:${posto.place_id}" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-gradient">
+                                    Ver no Maps
+                                </a>
+                            </div>
+                        `;
+                    });
+
+                    postosHTML += `
+                            </div>
+                        </div>
+                    `;
+
+                    showResult(postosHTML);
+                } else {
+                    showResult(`
+                        <div class="alert alert-danger">
+                            Não foi possível encontrar postos próximos.
+                        </div>
+                    `);
+                }
+            });
+        },
+        (error) => {
+            let mensagemErro = 'Erro ao obter sua localização.';
+            
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    mensagemErro = 'Você precisa permitir o acesso à sua localização.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    mensagemErro = 'Informações de localização indisponíveis.';
+                    break;
+                case error.TIMEOUT:
+                    mensagemErro = 'Tempo esgotado ao buscar localização.';
+                    break;
+            }
+
+            showResult(`
+                <div class="alert alert-danger">
+                    ${mensagemErro}
+                </div>
+            `);
+        }
+    );
+}
+
+// Modifique a função initMap para limpar o conteúdo anterior
+async function initMap() {
+    console.log('Iniciando função initMap');
+    
+    try {
+        // Verifica se a API do Google Maps está disponível
+        if (typeof google === 'undefined' || !google.maps) {
+            throw new Error('API do Google Maps não está carregada');
+        }
+
+        // Remove mapa anterior se existir
+        const mapaExistente = document.querySelector('.map-container');
+        if (mapaExistente) {
+            mapaExistente.remove();
+        }
+
+        // Cria o novo container do mapa
+        const mapDiv = document.createElement('div');
+        mapDiv.className = 'map-container';
+        mapDiv.innerHTML = `
+            <div id="map" class="custom-map"></div>
+            <div id="postos-lista" class="postos-proximos">
+                <p class="text-white text-center">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Carregando...
+                </p>
+            </div>
+        `;
+        
+        const calculadoraSection = document.getElementById('calculadora');
+        calculadoraSection.insertBefore(mapDiv, calculadoraSection.firstChild);
+
+        // Cria um elemento div para o serviço Places
+        const placesDiv = document.createElement('div');
+        document.body.appendChild(placesDiv);
+
+        // Inicializa o mapa com opções básicas
+        const mapOptions = {
+            zoom: 15,
+            mapTypeControl: false,
+            fullscreenControl: false,
+            streetViewControl: false,
+            styles: [
+                {
+                    featureType: "all",
+                    elementType: "geometry",
+                    stylers: [{ color: "#242f3e" }]
+                },
+                {
+                    featureType: "all",
+                    elementType: "labels.text.stroke",
+                    stylers: [{ color: "#242f3e" }]
+                },
+                {
+                    featureType: "all",
+                    elementType: "labels.text.fill",
+                    stylers: [{ color: "#746855" }]
+                }
+            ]
+        };
+
+        const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+        // Obtém localização atual
+        if (!navigator.geolocation) {
+            throw new Error('Geolocalização não suportada pelo navegador');
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                map.setCenter(pos);
+
+                // Marcador da localização atual
+                new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: 'Sua localização',
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: "#4285F4",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#FFFFFF"
+                    }
+                });
+
+                try {
+                    const service = new google.maps.places.PlacesService(map);
+                    const request = {
+                        location: pos,
+                        radius: 2000,
+                        type: ['gas_station']
+                    };
+
+                    service.nearbySearch(request, (results, status) => {
+                        const postosLista = document.getElementById('postos-lista');
+                        
+                        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                            postosLista.innerHTML = `
+                                <h3 class="text-white mb-4">Postos Próximos</h3>
+                                <div class="postos-list">
+                                    ${results.slice(0, 5).map(posto => `
+                                        <div class="posto-item">
+                                            <h5 class="text-white">${posto.name}</h5>
+                                            <p class="text-white-80">
+                                                <i class="fas fa-map-marker-alt"></i> 
+                                                ${posto.vicinity}
+                                            </p>
+                                            <p class="text-white-80">
+                                                <i class="fas fa-star"></i> 
+                                                ${posto.rating ? `${posto.rating}/5 ⭐` : 'Sem avaliações'}
+                                            </p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `;
+
+                            results.forEach(posto => {
+                                new google.maps.Marker({
+                                    position: posto.geometry.location,
+                                    map: map,
+                                    title: posto.name,
+                                    icon: {
+                                        url: 'https://maps.google.com/mapfiles/ms/icons/gas.png'
+                                    }
+                                });
+                            });
+                        } else {
+                            postosLista.innerHTML = `
+                                <div class="alert alert-danger">
+                                    Não foi possível encontrar postos próximos.
+                                    Status: ${status}
+                                </div>
+                            `;
+                        }
+                    });
+                } catch (error) {
+                    console.error('Erro ao buscar postos:', error);
+                    document.getElementById('postos-lista').innerHTML = `
+                        <div class="alert alert-danger">
+                            Erro ao buscar postos: ${error.message}
+                        </div>
+                    `;
+                }
+            },
+            (error) => {
+                console.error('Erro de geolocalização:', error);
+                document.getElementById('postos-lista').innerHTML = `
+                    <div class="alert alert-danger">
+                        Por favor, permita o acesso à sua localização para encontrar postos próximos.
+                    </div>
+                `;
+            }
+        );
+
+    } catch (error) {
+        console.error('Erro ao inicializar mapa:', error);
+        alert(`Erro ao carregar o mapa: ${error.message}`);
+    }
+}
+
+// Função para buscar postos próximos
+function buscarPostosProximos(position, map, infowindow) {
+    const service = new google.maps.places.PlacesService(map.innerMap);
+    
+    const request = {
+        location: position,
+        radius: '2000',
+        type: ['gas_station']
+    };
+
+    service.nearbySearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Criar lista de postos
+            let postosHTML = `
+                <div class="postos-proximos">
+                    <h3 class="text-white mb-4">Postos Próximos</h3>
+                    <div class="postos-list">
+            `;
+
+            results.slice(0, 5).forEach(posto => {
+                const rating = posto.rating ? `${posto.rating}/5 ⭐` : 'Sem avaliações';
+                
+                postosHTML += `
+                    <div class="posto-item" onclick="mostrarDetalhes('${posto.place_id}', ${position.lat}, ${position.lng})">
+                        <h5 class="text-white">${posto.name}</h5>
+                        <p class="text-white-80">
+                            <i class="fas fa-map-marker-alt"></i> 
+                            ${posto.vicinity}
+                        </p>
+                        <p class="text-white-80">
+                            <i class="fas fa-star"></i> 
+                            ${rating}
+                        </p>
+                    </div>
+                `;
+
+                // Adicionar marcador no mapa
+                const marker = new google.maps.Marker({
+                    position: posto.geometry.location,
+                    map: map.innerMap,
+                    title: posto.name,
+                    icon: {
+                        url: 'https://maps.google.com/mapfiles/ms/icons/gas.png'
+                    }
+                });
+
+                marker.addListener('click', () => {
+                    infowindow.setContent(`
+                        <div>
+                            <h5>${posto.name}</h5>
+                            <p>${posto.vicinity}</p>
+                            <p>Avaliação: ${rating}</p>
+                        </div>
+                    `);
+                    infowindow.open(map.innerMap, marker);
+                });
+            });
+
+            postosHTML += `
+                    </div>
+                </div>
+            `;
+
+            // Adicionar lista ao DOM
+            const listContainer = document.createElement('div');
+            listContainer.innerHTML = postosHTML;
+            document.querySelector('.map-container').appendChild(listContainer);
+        }
+    });
+}
+
+// Inicializar o mapa quando a página carregar
+document.addEventListener('DOMContentLoaded', initMap);

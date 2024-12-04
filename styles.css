@@ -967,3 +967,137 @@ input, button {
         word-wrap: break-word;
     }
 }
+
+/* Adicione estes estilos */
+.postos-list {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.posto-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 229, 255, 0.1);
+    margin-bottom: 1rem;
+}
+
+.posto-item h5 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.posto-item p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.posto-item i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+    width: 20px;
+    text-align: center;
+}
+
+.posto-item .btn {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 1rem;
+}
+
+/* Estilização da scrollbar para a lista de postos */
+.postos-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.postos-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.postos-list::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+/* Adicione estes estilos */
+.map-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    margin-bottom: 2rem;
+    height: 500px;
+}
+
+.custom-map {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.place-picker {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    width: calc(100% - 20px);
+    max-width: 400px;
+}
+
+.postos-proximos {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1rem;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .map-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .custom-map {
+        height: 300px;
+    }
+
+    .postos-proximos {
+        height: 300px;
+    }
+}
+
+/* Ajuste do espaçamento dos botões */
+.btn {
+    margin: 10px 0; /* Adiciona margem vertical */
+}
+
+.calculator-card .btn {
+    margin-top: 20px; /* Aumenta o espaço acima dos botões nas calculadoras */
+}
+
+.posto-item .btn {
+    margin: 15px 0 5px 0; /* Ajusta margem específica para botões nos postos */
+}
+
+/* Quando houver múltiplos botões em sequência */
+.btn + .btn {
+    margin-left: 15px; /* Adiciona espaço entre botões lado a lado */
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .btn {
+        margin: 15px 0; /* Aumenta ainda mais o espaço em dispositivos móveis */
+    }
+    
+    /* Quando os botões ficam empilhados em mobile */
+    .btn + .btn {
+        margin-left: 0;
+        margin-top: 15px;
+    }
+}
