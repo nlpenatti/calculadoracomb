@@ -1,0 +1,192 @@
+:root {
+  --primary-color: #00E5FF;
+  --primary-light: #18ffff;
+  --dark-blue: #0B1437;
+  --dark-purple: #1A1B3C;
+}
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--dark-blue) 0%, var(--dark-purple) 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.hero {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(11, 20, 55, 0.3);
+    backdrop-filter: blur(10px);
+    z-index: 0;
+}
+
+.hero > .container {
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    color: white;
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    animation: slideUp 1s ease-out;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    font-weight: 300;
+    animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.hero-image {
+    width: 100%;  /* Aumentando de 80% para 100% */
+    max-width: 600px; /* Limitando o tamanho máximo */
+    border-radius: 30px; /* Bordas arredondadas */
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+}
+
+/* Para telas menores */
+@media (max-width: 768px) {
+    .hero-image {
+        width: 90%;
+        margin-top: 2rem;
+        border-radius: 20px; /* Bordas um pouco menores em mobile */
+    }
+}
+
+.btn-gradient {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    border: none;
+    color: var(--dark-blue);
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+    transition: all 0.3s ease;
+    animation: fadeIn 1s ease-out 1s both;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4);
+    background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
+    color: var(--dark-blue);
+}
+
+.calculator-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 32px rgba(0, 229, 255, 0.05);
+    border: 1px solid rgba(0, 229, 255, 0.1);
+    animation: scaleIn 0.5s ease-out;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 229, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1);
+    color: white;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.alert {
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    color: var(--primary-light);
+}
+
+.alert-danger {
+    background: rgba(255, 99, 132, 0.1);
+    border: 1px solid rgba(255, 99, 132, 0.2);
+    color: #ff6384;
+}
+
+.calculator-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 24px;
+    background: linear-gradient(45deg, transparent, rgba(0, 229, 255, 0.05), transparent);
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-image {
+        width: 100%;
+        margin-top: 2rem;
+    }
+}
