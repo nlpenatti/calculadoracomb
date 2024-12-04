@@ -415,6 +415,8 @@ h1 {
 /* Estilo para os resultados */
 .result-details {
     color: #fff;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .result-value {
@@ -426,8 +428,8 @@ h1 {
 /* Animação de digitação */
 .typing {
     overflow: hidden;
-    white-space: nowrap;
-    animation: typing 2s steps(40, end);
+    white-space: normal !important;
+    animation: none;
     margin: 0;
 }
 
@@ -934,4 +936,34 @@ input, button {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px); /* Suporte para Safari */
     border: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+/* Ajuste do modal de resultado */
+.result-details {
+    color: #fff;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.result-content {
+    word-break: break-word;
+}
+
+.typing {
+    white-space: normal !important;
+    animation: none;
+}
+
+/* Ajuste específico para mobile */
+@media (max-width: 768px) {
+    .modal-content-custom {
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 1.5rem;
+    }
+
+    .result-details p {
+        white-space: normal;
+        word-wrap: break-word;
+    }
 }
