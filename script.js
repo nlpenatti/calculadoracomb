@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const calculadoraSection = document.getElementById('calculadora');
             if (!calculadoraSection) return;
 
-            // Limpa o conteúdo anterior
+
             calculadoraSection.innerHTML = `
                 <div class="container">
                     <div class="row g-4">
@@ -141,15 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
 
-            // Scroll suave até a seção
+          
             calculadoraSection.scrollIntoView({ behavior: 'smooth' });
         });
     }
 });
 
-// Função para mostrar o modal com o resultado
+
 function showResult(resultado) {
-    // Remove qualquer modal existente antes de criar um novo
+
     const existingModals = document.querySelectorAll('.modal-custom');
     existingModals.forEach(modal => modal.remove());
 
@@ -173,22 +173,21 @@ function showResult(resultado) {
     setTimeout(() => modal.classList.add('active'), 10);
 }
 
-// Função para fechar o modal
+
 function closeModal(button) {
-    // Encontra o modal mais próximo
+
     const modal = button.closest('.modal-custom');
     if (!modal) return;
 
-    // Remove a classe active para iniciar a animação de saída
+
     modal.classList.remove('active');
 
-    // Remove o modal após a animação terminar
     setTimeout(() => {
         modal.remove();
-        document.body.style.overflow = 'auto'; // Restaura o scroll da página
+        document.body.style.overflow = 'auto'; // 
     }, 300);
 
-    // Previne que outros modais sejam abertos
+
     if (document.querySelector('.modal-custom')) {
         document.querySelectorAll('.modal-custom').forEach(m => {
             if (m !== modal) m.remove();
@@ -196,7 +195,7 @@ function closeModal(button) {
     }
 }
 
-// Adicione no início do arquivo
+
 function showLoading() {
     showResult(`
         <div class="text-center">
@@ -206,7 +205,7 @@ function showLoading() {
     `);
 }
 
-// Atualizar a função calcularCombustivel
+
 function calcularCombustivel() {
     const gasolina = parseFloat(document.getElementById('gasolina').value);
     const alcool = parseFloat(document.getElementById('alcool').value);
@@ -220,10 +219,10 @@ function calcularCombustivel() {
         return;
     }
     
-    // Mostrar loading
+
     showLoading();
     
-    // Simular processamento
+
     setTimeout(() => {
         const relacao = alcool / gasolina;
         
@@ -256,10 +255,10 @@ function calcularCombustivel() {
         `;
         
         showResult(mensagem);
-    }, 1500); // 1.5 segundos de loading
+    }, 1500); // 
 }
 
-// Atualizar a função calcularViagem de forma similar
+
 function calcularViagem() {
     const distancia = parseFloat(document.getElementById('distancia').value);
     const consumo = parseFloat(document.getElementById('consumo').value);
@@ -319,8 +318,7 @@ function calcularViagem() {
     }, 1500);
 }
 
-// Adicione a biblioteca ScrollReveal no HTML
-// <script src="https://unpkg.com/scrollreveal"></script>
+
 
 ScrollReveal().reveal('.calculator-card', {
     delay: 200,
@@ -344,7 +342,7 @@ function animateValue(obj, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// Adicione ao final do seu arquivo script.js
+
 window.addEventListener('scroll', function() {
     const backToTop = document.querySelector('.back-to-top');
     if (window.pageYOffset > 300) {
@@ -446,9 +444,9 @@ function showTermsModal() {
     setTimeout(() => modal.classList.add('active'), 10);
 }
 
-// Adicione estas funções para melhor experiência mobile
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Previne zoom em inputs no iOS
+
     const metas = document.getElementsByTagName('meta');
     let metaViewport = [...metas].find(meta => meta.name === "viewport");
     if (!metaViewport) {
@@ -458,7 +456,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     metaViewport.content = "width=device-width, initial-scale=1, maximum-scale=1";
 
-    // Ajusta altura do vh para mobile
+
     function setVH() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
